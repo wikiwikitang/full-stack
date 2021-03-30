@@ -6,10 +6,9 @@ var logger = require("morgan");
 
 var app = express();
 
-//app.use("/", indexRouter);
-//app.use("/users", usersRouter);
+app.use(express.static(path.join(__dirname, "public")));
 app.get("/test", (req, res) => {
-  res.send({
+  res.json({
     test1: "test1",
     test2: "test2",
     test3: "test3",
