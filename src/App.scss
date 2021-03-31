@@ -1,0 +1,15 @@
+.App {
+  text-align: center;
+  .add-todo-section {
+    margin-top: 20px;
+    .add-btn {
+      margin-left: 10px;
+    }
+  }
+
+  .todos-content {
+    .del-btn {
+      margin-left: 10px;
+    }
+  }
+}

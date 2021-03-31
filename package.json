@@ -44,6 +44,7 @@
     "jest-resolve": "26.6.0",
     "jest-watch-typeahead": "0.6.1",
     "mini-css-extract-plugin": "0.11.3",
+    "node-sass": "^5.0.0",
     "optimize-css-assets-webpack-plugin": "5.0.4",
     "pnp-webpack-plugin": "1.6.4",
     "postcss-flexbugs-fixes": "4.2.1",
@@ -74,9 +75,11 @@
   "scripts": {
     "client-start": "node scripts/start.js",
     "server-start": "cd server && npm run start",
+    "server-dev-start": "cd server && npm run server-dev",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
-    "start": "concurrently \"npm run server-start\" \"npm run client-start\""
+    "start": "concurrently \"npm run server-start\" \"npm run client-start\"",
+    "dev": "concurrently \"npm run server-dev-start\" \"npm run client-start\""
   },
   "eslintConfig": {
     "extends": [
