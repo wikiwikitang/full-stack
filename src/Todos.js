@@ -4,21 +4,21 @@ const Todos = ({ todos, modTodo, delTodo }) => {
       <div key={`${content}-${index}`}>
         <span
           style={{
-            textDecoration: isCompleted ? "line-through" : "none",
-            userSelect: "none",
+            textDecoration: isCompleted ? 'line-through' : 'none',
+            userSelect: 'none',
           }}
           onDoubleClick={() => modTodo(index)}
         >
           {content}
         </span>
-        <button className="del-btn" onClick={() => delTodo(index)}>
+        <button className='del-btn' onClick={() => delTodo(index)}>
           Delete
         </button>
       </div>
     );
   });
 
-  return <div className="todos-content">{todoContent}</div>;
+  return <div className='todos-content'>{todoContent}</div>;
 };
 
 export default Todos;
