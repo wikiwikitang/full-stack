@@ -1,6 +1,7 @@
 import "./App.scss";
 import { useEffect, useState } from "react";
 import Todos from "./Todos";
+import { sharedAjaxConfig } from "./utils/index";
 
 const App = () => {
   const [todos, setTodos] = useState([]);
@@ -32,28 +33,39 @@ const App = () => {
     setTodos([...todos, { content: todoContent, isCompleted: false }]);
     setTodoContent("");
     const rawData = await fetch("/addTodo", {
-      method: "POST", // *GET, POST, PUT, DELETE, etc.
-      mode: "cors", // no-cors, *cors, same-origin
-      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: "same-origin", // include, *same-origin, omit
-      headers: {
-        "Content-Type": "application/json",
-      },
-      redirect: "follow", // manual, *follow, error
-      referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+      ...sharedAjaxConfig,
       body: JSON.stringify({ content: todoContent, isCompleted: false }), // body data type must match "Content-Type" header
     });
     const data = await rawData.json();
     console.log(data);
   };
 
-  const modTodo = (index) => {
+  const modTodo = async (index) => {
+    const rawResponse = await fetch("/modTodo", {
+      ...sharedAjaxConfig,
+      body: JSON.stringify({ index }), // body data type must match "Content-Type" header
+    });
+
+    const response = await rawResponse.json();
+    if (response.modTodo === "failed") {
+      alert("Change status failed ");
+    }
+
     const newTodos = [...todos];
     newTodos[index].isCompleted = !newTodos[index].isCompleted;
     setTodos(newTodos);
   };
 
-  const delTodo = (index) => {
+  const delTodo = async (index) => {
+    const rawResponse = await fetch("/delTodo", {
+      ...sharedAjaxConfig,
+      body: JSON.stringify({ index }), // body data type must match "Content-Type" header
+    });
+
+    const response = await rawResponse.json();
+    if (response.delTodo === "failed") {
+      alert("Delete Todo failed ");
+    }
     const newTodos = [...todos.slice(0, index), ...todos.slice(index + 1)];
     setTodos(newTodos);
   };
