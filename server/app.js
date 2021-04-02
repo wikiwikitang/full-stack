@@ -1,6 +1,8 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
+require('./database/connect');
+const Todo = require('./database/model');
 
 var app = express();
 app.use(express.json()); // to support JSON-encoded bodies
@@ -22,12 +24,21 @@ app.get('/allTodos', (req, res) => {
   res.json(todos);
 });
 
-app.post('/addTodo', (req, res) => {
+app.post('/addTodo', async (req, res) => {
   console.log(req.body);
   if (req.body && req.body.content) {
     todos = [...todos, req.body];
-    res.json({ addTodo: 'succeeded' });
-    return;
+    const todo = new Todo({
+      content: req.body.content,
+      isCompleted: req.body.isCompleted,
+    });
+
+    const newTodo = await todo.save();
+    if (newTodo === todo) {
+      res.json({ addTodo: 'succeeded' });
+      return;
+    }
+    return res.json({ addTodo: 'failed' });
   }
   res.json({ addTodo: 'failed' });
 });
