@@ -3,8 +3,9 @@
 /**
  * Module dependencies.
  */
+
+const mongoose = require('mongoose');
 const connectToMongoose = require('../database/connect');
-connectToMongoose();
 var app = require('../app');
 var debug = require('debug')('server:server');
 var http = require('http');
@@ -13,6 +14,7 @@ var http = require('http');
  * Get port from environment and store in Express.
  */
 
+connectToMongoose(mongoose);
 var port = normalizePort(process.env.PORT || '3002');
 app.set('port', port);
 
