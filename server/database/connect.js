@@ -21,15 +21,18 @@ mongodb+srv://chen-tang:Applewmt1@cluster0.8ywno.mongodb.net/test
 You will be prompted for the password for the chen-tang user's (Database User) username.
 When entering your password, make sure that any special characters are URL encoded.
 */
+const connectToMongoose = () => {
+  mongoose.connect(
+    'mongodb+srv://chen-tang:Applewmt1@cluster0.8ywno.mongodb.net/todosDatabase?retryWrites=true&w=majority',
+    { useNewUrlParser: true, useUnifiedTopology: true }
+  );
 
-mongoose.connect(
-  'mongodb+srv://chen-tang:Applewmt1@cluster0.8ywno.mongodb.net/todosDatabase?retryWrites=true&w=majority',
-  { useNewUrlParser: true, useUnifiedTopology: true }
-);
+  const db = mongoose.connection;
+  db.on('error', console.error.bind(console, 'connection error:'));
+  db.once('open', function () {
+    // we're connected!
+    console.log("we're connected!");
+  });
+};
 
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function () {
-  // we're connected!
-  console.log("we're connected!");
-});
+module.exports = connectToMongoose;
