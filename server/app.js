@@ -1,10 +1,11 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
-const connectToMongoose = require('./database/connect');
+const mongoose = require('mongoose');
+//const connectToMongoose = require('./database/connect');
 const Todo = require('./database/model');
 
-connectToMongoose();
+//connectToMongoose();
 var app = express();
 app.use(express.json()); // to support JSON-encoded bodies
 app.use(express.urlencoded()); // to support URL-encoded bodies
