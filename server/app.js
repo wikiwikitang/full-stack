@@ -1,8 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
-const mongoose = require('mongoose');
-require('./database/connect');
 const Todo = require('./database/model');
 
 var app = express();
