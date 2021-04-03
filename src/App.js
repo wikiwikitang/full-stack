@@ -20,19 +20,14 @@ const App = () => {
   const handleInputTodo = (e) => {
     e.stopPropagation();
     const content = e.target.value;
-    if (content.trim() === '') {
-      return;
-    }
     setTodoContent(content);
   };
 
   const addTodo = async () => {
-    if (!todoContent) {
+    if (!todoContent || !todoContent.trim()) {
+      setTodoContent('');
       return;
     }
-
-    //reset the input
-    setTodoContent('');
 
     //communicate with backend for adding new todo
     const rawData = await fetch('/addTodo', {
@@ -44,6 +39,9 @@ const App = () => {
     if (data.addTodo === 'failed') {
       alert('Add Todo failed ');
     }
+
+    //reset the input
+    setTodoContent('');
 
     //reflesh the todos from back end
     await retrieveTodo();
