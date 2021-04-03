@@ -22,14 +22,24 @@ app.get('/test', (req, res) => {
   });
 });
 
-app.get('/allTodos', (req, res) => {
-  res.json(todos);
+app.get('/allTodos', async (req, res) => {
+  const todosRawDateFromDB = await Todo.find({}).exec();
+  const todosFromDB = todosRawDateFromDB.map(
+    ({ content, isCompleted, _id }) => {
+      return {
+        content,
+        isCompleted,
+        _id,
+      };
+    }
+  );
+  res.json(todosFromDB);
 });
 
 app.post('/addTodo', async (req, res) => {
-  console.log(req.body);
+  //console.log(req.body);
   if (req.body && req.body.content) {
-    todos = [...todos, req.body];
+    //todos = [...todos, req.body];
     const todo = new Todo({
       content: req.body.content,
       isCompleted: req.body.isCompleted,
@@ -45,21 +55,32 @@ app.post('/addTodo', async (req, res) => {
   res.json({ addTodo: 'failed' });
 });
 
-app.post('/modTodo', (req, res) => {
-  console.log(req.body);
-  if (req.body && req.body.index !== undefined) {
-    todos[req.body.index].isCompleted = !todos[req.body.index].isCompleted;
-    res.json({ modTodo: 'succeeded' });
-    return;
+app.post('/modTodo', async (req, res) => {
+  //console.log(req.body);
+  if (req.body && req.body.index !== undefined && req.body._id) {
+    const queryResult = await Todo.findOne({ _id: req.body._id });
+    console.log(queryResult);
+    const originIsCompletedStatus = queryResult.isCompleted;
+    queryResult.isCompleted = !queryResult.isCompleted;
+    const saveResult = await queryResult.save();
+    //todos[req.body.index].isCompleted = !todos[req.body.index].isCompleted;
+    if (saveResult.isCompleted === !originIsCompletedStatus) {
+      res.json({ modTodo: 'succeeded' });
+      return;
+    }
   }
   res.json({ modTodo: 'failed' });
 });
 
-app.post('/delTodo', (req, res) => {
-  if (req.body && req.body.index !== undefined) {
-    todos.splice(req.body.index, 1);
-    res.json({ delTodo: 'succeeded' });
-    return;
+app.post('/delTodo', async (req, res) => {
+  if (req.body && req.body.index !== undefined && req.body._id) {
+    //todos.splice(req.body.index, 1);
+
+    const result = await Todo.deleteOne({ _id: req.body._id });
+    if (result) {
+      res.json({ delTodo: 'succeeded' });
+      return;
+    }
   }
   res.json({ delTodo: 'failed' });
 });

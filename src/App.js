@@ -7,12 +7,13 @@ const App = () => {
   const [todos, setTodos] = useState([]);
   const [todoContent, setTodoContent] = useState('');
 
+  const retrieveTodo = async () => {
+    const rawData = await fetch('/allTodos');
+    const todosData = await rawData.json();
+    setTodos(todosData);
+  };
+
   useEffect(() => {
-    const retrieveTodo = async () => {
-      const rawData = await fetch('/allTodos');
-      const todosData = await rawData.json();
-      setTodos(todosData);
-    };
     retrieveTodo();
   }, []);
 
@@ -30,20 +31,29 @@ const App = () => {
       return;
     }
 
-    setTodos([...todos, { content: todoContent, isCompleted: false }]);
+    //reset the input
     setTodoContent('');
+
+    //communicate with backend for adding new todo
     const rawData = await fetch('/addTodo', {
       ...sharedAjaxConfig,
       body: JSON.stringify({ content: todoContent, isCompleted: false }), // body data type must match "Content-Type" header
     });
+
     const data = await rawData.json();
-    console.log(data);
+    if (data.addTodo === 'failed') {
+      alert('Add Todo failed ');
+    }
+
+    //reflesh the todos from back end
+    await retrieveTodo();
   };
 
-  const modTodo = async (index) => {
+  const modTodo = async (_id, index) => {
+    //communicate with backend for updating an existing todo
     const rawResponse = await fetch('/modTodo', {
       ...sharedAjaxConfig,
-      body: JSON.stringify({ index }), // body data type must match "Content-Type" header
+      body: JSON.stringify({ index, _id }), // body data type must match "Content-Type" header
     });
 
     const response = await rawResponse.json();
@@ -51,21 +61,25 @@ const App = () => {
       alert('Change status failed ');
     }
 
+    //update todos from state
     const newTodos = [...todos];
     newTodos[index].isCompleted = !newTodos[index].isCompleted;
     setTodos(newTodos);
   };
 
-  const delTodo = async (index) => {
+  const delTodo = async (_id, index) => {
+    //communicate with backend for deleting an existing todo
     const rawResponse = await fetch('/delTodo', {
       ...sharedAjaxConfig,
-      body: JSON.stringify({ index }), // body data type must match "Content-Type" header
+      body: JSON.stringify({ index, _id }), // body data type must match "Content-Type" header
     });
 
     const response = await rawResponse.json();
     if (response.delTodo === 'failed') {
       alert('Delete Todo failed ');
     }
+
+    //remove todos from state
     const newTodos = [...todos.slice(0, index), ...todos.slice(index + 1)];
     setTodos(newTodos);
   };

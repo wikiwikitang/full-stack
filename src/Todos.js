@@ -1,17 +1,17 @@
 const Todos = ({ todos, modTodo, delTodo }) => {
-  const todoContent = todos.map(({ content, isCompleted }, index) => {
+  const todoContent = todos.map(({ content, isCompleted, _id }, index) => {
     return (
-      <div key={`${content}-${index}`}>
+      <div key={_id}>
         <span
           style={{
             textDecoration: isCompleted ? 'line-through' : 'none',
             userSelect: 'none',
           }}
-          onDoubleClick={() => modTodo(index)}
+          onDoubleClick={() => modTodo(_id, index)}
         >
           {content}
         </span>
-        <button className='del-btn' onClick={() => delTodo(index)}>
+        <button className='del-btn' onClick={() => delTodo(_id, index)}>
           Delete
         </button>
       </div>
