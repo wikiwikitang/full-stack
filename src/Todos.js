@@ -1,7 +1,9 @@
+import Button from 'react-bootstrap/Button';
+
 const Todos = ({ todos, modTodo, delTodo }) => {
   const todoContent = todos.map(({ content, isCompleted, _id }, index) => {
     return (
-      <div key={_id}>
+      <div key={_id} className='todo-list-element'>
         <span
           style={{
             textDecoration: isCompleted ? 'line-through' : 'none',
@@ -11,9 +13,14 @@ const Todos = ({ todos, modTodo, delTodo }) => {
         >
           {content}
         </span>
-        <button className='del-btn' onClick={() => delTodo(_id, index)}>
+        <Button
+          className='del-btn'
+          size='sm'
+          variant='danger'
+          onClick={() => delTodo(_id, index)}
+        >
           Delete
-        </button>
+        </Button>
       </div>
     );
   });

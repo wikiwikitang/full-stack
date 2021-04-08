@@ -1,6 +1,8 @@
 .App {
   text-align: center;
   .add-todo-section {
+    display: flex;
+    justify-content: center;
     margin-top: 20px;
     .add-btn {
       margin-left: 10px;
@@ -8,8 +10,11 @@
   }
 
   .todos-content {
-    .del-btn {
-      margin-left: 10px;
+    .todo-list-element {
+      height: 36px;
+      .del-btn {
+        margin-left: 10px;
+      }
     }
   }
 }

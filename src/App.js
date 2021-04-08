@@ -1,5 +1,6 @@
 import './App.scss';
 import { useEffect, useState } from 'react';
+import Button from 'react-bootstrap/Button';
 import Todos from './Todos';
 import { sharedAjaxConfig } from './utils/index';
 
@@ -86,9 +87,9 @@ const App = () => {
     <div className='App'>
       <div className='add-todo-section'>
         <input type='text' value={todoContent} onChange={handleInputTodo} />
-        <button className='add-btn' onClick={addTodo}>
+        <Button variant='success' className='add-btn' onClick={addTodo}>
           Add Todo
-        </button>
+        </Button>
       </div>
       <div className='todos-section'>
         <hr />
