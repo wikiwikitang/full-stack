@@ -1,12 +1,6 @@
 import Button from 'react-bootstrap/Button';
 import { todo } from './utils/interfaces';
 
-// interface todo {
-//   content: string;
-//   isCompleted: boolean;
-//   _id: string;
-// }
-
 export const Todos: React.FC<{
   todos: todo[];
   modTodo: (_id: string, index: number) => void;
