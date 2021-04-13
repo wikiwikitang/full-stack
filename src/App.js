@@ -1,12 +1,14 @@
 import './App.scss';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Button from 'react-bootstrap/Button';
-import Todos from './Todos';
+//import Todos from './Todos';
+import { Todos } from './TodosTypeScript.tsx';
 import { sharedAjaxConfig } from './utils/index';
 
 const App = () => {
   const [todos, setTodos] = useState([]);
   const [todoContent, setTodoContent] = useState('');
+  const todoInputRef = useRef(null);
 
   const retrieveTodo = async () => {
     const rawData = await fetch('/allTodos');
@@ -16,6 +18,7 @@ const App = () => {
 
   useEffect(() => {
     retrieveTodo();
+    todoInputRef.current.focus();
   }, []);
 
   const handleInputTodo = (e) => {
@@ -27,6 +30,7 @@ const App = () => {
   const addTodo = async () => {
     if (!todoContent || !todoContent.trim()) {
       setTodoContent('');
+      todoInputRef.current.focus();
       return;
     }
 
@@ -46,6 +50,9 @@ const App = () => {
 
     //reflesh the todos from back end
     await retrieveTodo();
+
+    //set focus to todo input
+    todoInputRef.current.focus();
   };
 
   const modTodo = async (_id, index) => {
@@ -86,7 +93,12 @@ const App = () => {
   return (
     <div className='App'>
       <div className='add-todo-section'>
-        <input type='text' value={todoContent} onChange={handleInputTodo} />
+        <input
+          type='text'
+          ref={todoInputRef}
+          value={todoContent}
+          onChange={handleInputTodo}
+        />
         <Button variant='success' className='add-btn' onClick={addTodo}>
           Add Todo
         </Button>
