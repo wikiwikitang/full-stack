@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { Todos } from './TodosTypeScript.tsx';
 import { sharedAjaxConfig } from './utils/index';
 
-const App = () => {
+const TodoApp = () => {
   const [todos, setTodos] = useState([]);
   const [todoContent, setTodoContent] = useState('');
   const todoInputRef = useRef(null);
@@ -111,4 +111,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default TodoApp;
