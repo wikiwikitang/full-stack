@@ -1,11 +1,7 @@
 import Button from 'react-bootstrap/Button';
-import { todo } from './utils/interfaces';
+import { todoProps } from './utils/interfaces';
 
-export const Todos: React.FC<{
-  todos: todo[];
-  modTodo: (_id: string, index: number) => void;
-  delTodo: (_id: string, index: number) => void;
-}> = ({ todos, modTodo, delTodo }) => {
+export const Todos: React.FC<todoProps> = ({ todos, modTodo, delTodo }) => {
   const todoContent = todos.map(({ content, isCompleted, _id }, index) => {
     return (
       <div key={_id} className='todo-list-element'>
