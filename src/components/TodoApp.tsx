@@ -1,12 +1,14 @@
-import './App.scss';
+import '../styles/App.scss';
 import { useEffect, useState, useRef } from 'react';
 import Button from 'react-bootstrap/Button';
-//import Todos from './Todos';
-import { Todos } from './TodosTypeScript.tsx';
-import { sharedAjaxConfig } from './utils/index';
+// @ts-ignore
+import { TodosList } from './TodosList.tsx';
+// @ts-ignore
+import { sharedAjaxConfig } from '../utils/index.ts';
+import { todoFE } from '../utils/interfaces';
 
 const TodoApp = () => {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState<todoFE[]>([]);
   const [todoContent, setTodoContent] = useState('');
   const todoInputRef = useRef(null);
 
@@ -21,7 +23,7 @@ const TodoApp = () => {
     todoInputRef.current.focus();
   }, []);
 
-  const handleInputTodo = (e) => {
+  const handleInputTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.stopPropagation();
     const content = e.target.value;
     setTodoContent(content);
@@ -55,7 +57,7 @@ const TodoApp = () => {
     todoInputRef.current.focus();
   };
 
-  const modTodo = async (_id, index) => {
+  const modTodo = async (_id: string, index: number) => {
     //communicate with backend for updating an existing todo
     const rawResponse = await fetch('/modTodo', {
       ...sharedAjaxConfig,
@@ -73,7 +75,7 @@ const TodoApp = () => {
     setTodos(newTodos);
   };
 
-  const delTodo = async (_id, index) => {
+  const delTodo = async (_id: string, index: number) => {
     //communicate with backend for deleting an existing todo
     const rawResponse = await fetch('/delTodo', {
       ...sharedAjaxConfig,
@@ -105,7 +107,7 @@ const TodoApp = () => {
       </div>
       <div className='todos-section'>
         <hr />
-        <Todos todos={todos} modTodo={modTodo} delTodo={delTodo} />
+        <TodosList todos={todos} modTodo={modTodo} delTodo={delTodo} />
       </div>
     </div>
   );

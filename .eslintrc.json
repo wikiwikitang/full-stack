@@ -1,0 +1,20 @@
+{}
+// {
+//   "plugins": ["import"],
+//   "rules": {
+//     // turn on errors for missing imports
+//     "import/no-unresolved": "error"
+//   },
+//   "settings": {
+//     "import/resolver": {
+//       "@typescript-eslint/parser": [".ts", ".tsx"],
+//       "paths": ["./src"]
+//     }
+//   },
+//   "extends": [
+//     "plugin:@typescript-eslint/recommended",
+//     "plugin:import/errors",
+//     "plugin:import/warnings",
+//     "plugin:import/typescript"
+//   ]
+// }

@@ -1,3 +1,8 @@
+export interface todoFE {
+  content: string;
+  isCompleted: boolean;
+}
+
 interface todo {
   content: string;
   isCompleted: boolean;
