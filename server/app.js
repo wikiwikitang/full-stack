@@ -25,8 +25,9 @@ app.get('/test', (req, res) => {
 app.get('/allTodos', async (req, res) => {
   const todosRawDateFromDB = await Todo.find({}).exec();
   const todosFromDB = todosRawDateFromDB.map(
-    ({ content, isCompleted, _id }) => {
+    ({ title, content, isCompleted, _id }) => {
       return {
+        title,
         content,
         isCompleted,
         _id,
@@ -38,9 +39,10 @@ app.get('/allTodos', async (req, res) => {
 
 app.post('/addTodo', async (req, res) => {
   //console.log(req.body);
-  if (req.body && req.body.content) {
+  if (req.body && req.body.title) {
     //todos = [...todos, req.body];
     const todo = new Todo({
+      title: req.body.title,
       content: req.body.content,
       isCompleted: req.body.isCompleted,
     });

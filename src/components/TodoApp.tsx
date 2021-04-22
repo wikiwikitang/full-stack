@@ -1,14 +1,18 @@
 import '../styles/App.scss';
 import { useEffect, useState, useRef } from 'react';
 import Button from 'react-bootstrap/Button';
+import FormControl from 'react-bootstrap/FormControl';
 // @ts-ignore
 import { TodosList } from './TodosList.tsx';
 // @ts-ignore
 import { sharedAjaxConfig } from '../utils/index.ts';
 import { todoFE } from '../utils/interfaces';
+// @ts-ignore
+import { TodoModal } from './TodoModal.tsx';
 
 const TodoApp = () => {
   const [todos, setTodos] = useState<todoFE[]>([]);
+  const [todoTitle, setTodoTitle] = useState('');
   const [todoContent, setTodoContent] = useState('');
   const todoInputRef = useRef(null);
 
@@ -23,15 +27,17 @@ const TodoApp = () => {
     todoInputRef.current.focus();
   }, []);
 
-  const handleInputTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputTodo = (setStateMethod) => (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     e.stopPropagation();
     const content = e.target.value;
-    setTodoContent(content);
+    setStateMethod(content);
   };
 
   const addTodo = async () => {
-    if (!todoContent || !todoContent.trim()) {
-      setTodoContent('');
+    if (!todoTitle || !todoTitle.trim()) {
+      setTodoTitle('');
       todoInputRef.current.focus();
       return;
     }
@@ -39,7 +45,11 @@ const TodoApp = () => {
     //communicate with backend for adding new todo
     const rawData = await fetch('/addTodo', {
       ...sharedAjaxConfig,
-      body: JSON.stringify({ content: todoContent, isCompleted: false }), // body data type must match "Content-Type" header
+      body: JSON.stringify({
+        title: todoTitle,
+        content: todoContent,
+        isCompleted: false,
+      }), // body data type must match "Content-Type" header
     });
 
     const data = await rawData.json();
@@ -48,6 +58,7 @@ const TodoApp = () => {
     }
 
     //reset the input
+    setTodoTitle('');
     setTodoContent('');
 
     //reflesh the todos from back end
@@ -92,19 +103,41 @@ const TodoApp = () => {
     setTodos(newTodos);
   };
 
+  const cancelInputTodo = () => {
+    setTodoTitle('');
+    setTodoContent('');
+  };
+
   return (
     <div className='App'>
       <div className='add-todo-section'>
         <input
+          className='todo-title-input'
           type='text'
           ref={todoInputRef}
+          value={todoTitle}
+          onChange={handleInputTodo(setTodoTitle)}
+          placeholder='  Todo Title'
+        />
+        <FormControl
+          as='textarea'
           value={todoContent}
-          onChange={handleInputTodo}
+          onChange={handleInputTodo(setTodoContent)}
+          className='todo-content-input'
+          placeholder='Todo Content'
         />
         <Button variant='success' className='add-btn' onClick={addTodo}>
           Add Todo
         </Button>
+        <Button
+          variant='danger'
+          className='cancel-btn'
+          onClick={cancelInputTodo}
+        >
+          Cancel
+        </Button>
       </div>
+
       <div className='todos-section'>
         <hr />
         <TodosList todos={todos} modTodo={modTodo} delTodo={delTodo} />

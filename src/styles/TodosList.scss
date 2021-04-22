@@ -1,0 +1,27 @@
+.todos-content {
+  margin: auto;
+  width: 500px;
+
+  .todo-list-element {
+    display: flex;
+    margin: auto;
+    width: 450px;
+    height: 36px;
+    margin-bottom: 20px;
+
+    .del-btn {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+
+    .todo-title {
+      width: 100px;
+    }
+
+    .todo-content {
+      width: 250px;
+      margin-left: 20px;
+      word-wrap: break-word;
+    }
+  }
+}
