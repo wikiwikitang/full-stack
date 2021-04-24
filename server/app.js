@@ -1,9 +1,15 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
 const mongoose = require('mongoose');
 const connectToMongoose = require('./database/connect');
 const Todo = require('./database/model');
+
+//take care of GraphQL
+//const { graphqlHTTP } = require('express-graphql');
+const { graphqlHTTP } = require('express-graphql');
+//const { buildSchema } = require('graphql');
+const { schema, root } = require('./graphql');
 
 connectToMongoose(mongoose);
 var app = express();
@@ -14,6 +20,16 @@ app.use(express.urlencoded()); // to support URL-encoded bodies
 let todos = [{ content: '123', isCompleted: false }];
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(
+  '/graphql',
+  graphqlHTTP({
+    schema,
+    rootValue: root,
+    graphiql: true,
+  })
+);
+
 app.get('/test', (req, res) => {
   res.json({
     test1: 'test1',
@@ -96,7 +112,12 @@ console.log(path.join(__dirname, 'public'));
 
 app.listen(
   process.env.PORT || '3002',
-  console.log(`Server is starting at ${process.env.PORT || '3002'}`)
+  console.log(`Server is starting at ${process.env.PORT || '3002'}`),
+  console.log(
+    `Running a GraphQL API server at http://localhost:${
+      process.env.PORT || '3002'
+    }/graphql`
+  )
 );
 
 module.exports = app;
